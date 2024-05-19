@@ -64,7 +64,7 @@ namespace SonseArt.Pages.Cart
                     UserId = user.Id,
                     User = user,
                     Status = "Waiting",
-                    Adres = $"City: {user.City} Street: {user.Street} House: {user.House}",
+                    Adres = $"City: {user.City}, Street: {user.Street}, House: {user.House}",
                     Items = new List<OrderItem>(),
                     UserFirstName = user.FirstName,
                     UserLastName = user.LastName,

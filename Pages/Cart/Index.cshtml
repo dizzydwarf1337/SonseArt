@@ -59,9 +59,9 @@
                     <div class="col-md-6 offset-md-6">
                         <div class="d-flex justify-content-end">
                             <div>
-                                <p>Total: @Model.Cart.GetCost()</p>
                                 @if (Model.Cart.Items.Count() > 0)
                                 {
+                                    <p>Total: @Model.Cart.GetCost()</p>
                                     <form method="post" asp-page-handler="MakeAnOrder">
                                         <input type="hidden" name="CartId" value="@Model.Cart.Id" />
                                         <button type="submit" class="btn btn-outline-primary">Make an Order</button>

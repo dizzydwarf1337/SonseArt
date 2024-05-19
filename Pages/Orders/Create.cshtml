@@ -1,0 +1,68 @@
+﻿@page
+@model SonseArt.Pages.Orders.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Order</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Order.Id" class="control-label"></label>
+                <input asp-for="Order.Id" class="form-control" />
+                <span asp-validation-for="Order.Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Order.UserId" class="control-label"></label>
+                <select asp-for="Order.UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Order.Status" class="control-label"></label>
+                <input asp-for="Order.Status" class="form-control" />
+                <span asp-validation-for="Order.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Order.OrderPrice" class="control-label"></label>
+                <input asp-for="Order.OrderPrice" class="form-control" />
+                <span asp-validation-for="Order.OrderPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Order.Adres" class="control-label"></label>
+                <input asp-for="Order.Adres" class="form-control" />
+                <span asp-validation-for="Order.Adres" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Order.UserFirstName" class="control-label"></label>
+                <input asp-for="Order.UserFirstName" class="form-control" />
+                <span asp-validation-for="Order.UserFirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Order.UserLastName" class="control-label"></label>
+                <input asp-for="Order.UserLastName" class="form-control" />
+                <span asp-validation-for="Order.UserLastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Order.UserPhone" class="control-label"></label>
+                <input asp-for="Order.UserPhone" class="form-control" />
+                <span asp-validation-for="Order.UserPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
