@@ -8,94 +8,117 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<User> _signInManager
 @inject UserManager<User> _userManager
-<h1>Details</h1>
+
+<!-- Product section-->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="@Model.Product.Image" alt="@Model.Product.Name" /></div>
+            <div class="col-md-6">
+                <h1 class="display-5 fw-bolder">@Model.Product.Name</h1>
+                <div class="fs-5 mb-5">
+                    <span>@Model.Product.Price</span>
+                </div>
+                <p class="lead">@Model.Product.Description</p>
+                <div class="d-flex">
+                    <form method="post" asp-page-handler="AddToCart">
+                        <input asp-for="Quantity" class="form-control text-center me-3" type="num" value="1" style="max-width: 3rem" />
+                        <button class="btn btn-outline-dark flex-shrink-0" type="submit">
+                        <i class="bi-cart-fill me-1"></i>
+                        Add to cart
+                    </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 
 <div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Product.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.Price)
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Product.Price
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Product.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.Image)
-        </dt>
-        <dd class="col-sm-10">
-            <image src="@Model.Product.Image" style="width: 18rem;">
-        </dd>
-        <dt>
-        <div>
-            @if (User.IsInRole("Admin"))
-            {
-                <a asp-page="./Edit" asp-route-id="@Model.Product.Id">Edit</a>
-            }
-            <a asp-page="./Index">Back to List</a>
-        </div>
-        @if (_signInManager.IsSignedIn(User))
+    <div>
+        @if (User.IsInRole("Admin"))
         {
-            <form method="post" asp-page-handler="AddComment" style="width:300px; height=40px">
-                <div>
-                 <label>Your comment:</label>
-                <input asp-for="comment.Text" class="form-control form-control-sm"  aria-label="Your comment"> 
+            <a asp-page="./Edit" asp-route-id="@Model.Product.Id">Edit</a>
+        }
+    </div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <form method="post" asp-page-handler="AddComment">
+            <div class="form-group">
+                <label for="commentText">Your comment:</label>
+                <textarea id="commentText" name="comment.Text" class="form-control" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+    }
+    else
+    {
+        <p>Please log in to add comments.</p>
+    }
+
+    <h4>Comments:</h4>
+
+    @if (Model._comments != null && Model._comments.Any())
+    {
+        @foreach (var comment in Model._comments.OrderByDescending(c => c.Created))
+        {
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@comment.Text</h5>
                 </div>
-                <button type="submit" class="btn btn-primary">Send</button>
-            </form>
-            <form method="post" asp-page-handler="AddToCart">
-                    <button type="submit" class="btn btn-success">Add to cart</button>
-            </form>
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    <p class="card-text">@comment.Author - @comment.Created.ToString("dd.MM.yyyy HH:mm")</p>
+                    @if (User.IsInRole("Admin") || _userManager.GetUserId(User) == comment.AuthorId)
+                    {
+                        <form method="post" asp-page-handler="Delete">
+                            <input type="hidden" name="commentId" value="@comment.Id" />
+                            <button type="submit" class="btn btn-danger">Delete Comment</button>
+                        </form>
+                    }
+                </div>
+            </div>
         }
-        else
-        {
-            <p>Log in before adding comments</p>
-        }
-        </dt>
-        <dt class="col-sm-2">
-             <p>Comments:</p>
-        </dt>
-        <dd>
-            @if (Model._comments!= null)
+    }
+    else
+    {
+        <p>No comments yet.</p>
+    }
+
+
+
+<section class="py-5 bg-light">
+    <div class="container px-4 px-lg-5 mt-5">
+        <h2 class="fw-bolder mb-4">Related products</h2>
+       
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            @foreach (var item in Model.RelatedProducts)
             {
-                @foreach (var c in Model._comments.OrderByDescending(c=>c.Created))
-                {
-                <ul>
-                        <div class="card w-75 mb-3">
-                            <div class="card-body">
-                                <h4 class="card-title">@c.Text</h4>
-                            </div>
-                            <div class="card-footer d-flex justify-content-between">
-                                @if (User.IsInRole("Admin") || _userManager.GetUserId(User)==c.AuthorId)
-                                {
-                                    <form method="post" asp-page-handler="Delete">
-                                        <input type="hidden" name="commentId" value="@c.Id" />
-                                        <button type="submit" class="btn btn-danger">Delete Comment</button>
-                                    </form>
-                                }
-                                <p class="card-text">@c.Author - @c.Created.ToString("dd.MM.yyyy HH:mm")</p>
-                            </div>
+                <div class="col mb-5">
+                    <div class="card" style="width: 18rem; margin-bottom: 10px;">
+                    <!-- Product image-->
+                        <img class="card-img-top" src="@item.Image" alt="@item.Name" style="height: 15rem; object-fit: cover;" />
+                    <!-- Product details-->
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <!-- Product name-->
+                            <h5 class="fw-bolder">@item.Name</h5>
+                            <!-- Product price-->
+                            @item.Price
                         </div>
-                </ul>
-                }
+                    </div>
+                    <!-- Product actions-->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center">
+                            <a class="btn btn-outline-dark mt-auto" asp-route-id="@item.Id">Add to cart</a>
+                            </div>
+                    </div>
+                </div>
+            </div>
             }
-            else
-            {
-                <p>No comments yet.</p>
-            }
-        </dd>
-    </dl>
-</div>
+           
+        </div>
+    </div>
+</section>
+
 

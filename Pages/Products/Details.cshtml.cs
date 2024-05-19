@@ -28,8 +28,9 @@ namespace SonseArt.Pages.Products
         public List<Comment> _comments { get; set; } = default!;
         [BindProperty]
         public Comment comment { get; set; } = default!;
+        public List<Product> RelatedProducts { get; set; } = default!;
         public Models.Cart cart { get; set; } = default!;
-
+        public int Quantity { get; set; } = default!;
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -42,6 +43,7 @@ namespace SonseArt.Pages.Products
                            where c.ProductId == id
                            select c;
             _comments = comments.ToList();
+            RelatedProducts = GetRandomObjects<Product>(await _context.Product.ToListAsync(), 4, product.Id);
             if (product == null)
             {
                 return NotFound();
@@ -83,8 +85,9 @@ namespace SonseArt.Pages.Products
 
             return await OnGetAsync(commentToDelete.ProductId); 
         }
-        public async Task<IActionResult> OnPostAddToCartAsync()
+        public async Task<IActionResult> OnPostAddToCartAsync(int Quantity)
         {
+            
             int? productId = TempData["ProductId"] as int?;
             var user =await _userManager.GetUserAsync(User);
             var product = await _context.Product.FirstOrDefaultAsync(m => m.Id == productId);
@@ -104,7 +107,7 @@ namespace SonseArt.Pages.Products
                     _cartItem = item;
                     if (_cartItem.ProductId == product.Id)
                     {
-                        item.Quantity++;
+                        item.Quantity += Quantity;
                         await _context.SaveChangesAsync();
                         return await OnGetAsync(productId);
                     }
@@ -120,6 +123,7 @@ namespace SonseArt.Pages.Products
                 _cartItem.ProductName = product.Name;
                 _cartItem.ProductPrice= product.Price;
                 _cartItem.ImgSrc = product.Image;
+                _cartItem.Quantity = Quantity;
                 cart.Items.Add(_cartItem);
             
             
@@ -127,5 +131,26 @@ namespace SonseArt.Pages.Products
             return await OnGetAsync(productId);
         }
 
+
+        static List<Product> GetRandomObjects<T>(List<Product> list, int count,int productId)
+        {
+            List<Product> randomObjects = new List<Product>();
+            Random rand = new Random();
+
+            for (int i = list.Count - 1; i > 0; i--)
+            {
+                int j = rand.Next(0, i + 1);
+                Product temp = list[i];
+                list[i] = list[j];
+                list[j] = temp;
+            }
+
+            for (int i = 0; i < count && i < list.Count; i++)
+            {
+                randomObjects.Add(list[i]);
+            }
+
+            return randomObjects;
+        }
     }
 }
