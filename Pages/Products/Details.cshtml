@@ -1,0 +1,101 @@
+﻿@page
+@model SonseArt.Pages.Products.DetailsModel
+
+@{
+    ViewData["Title"] = Model.Product.Name;
+}
+@using Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> _signInManager
+@inject UserManager<User> _userManager
+<h1>Details</h1>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Product.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Product.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Product.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Product.Price
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Product.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Product.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Product.Image)
+        </dt>
+        <dd class="col-sm-10">
+            <image src="@Model.Product.Image" style="width: 18rem;">
+        </dd>
+        <dt>
+        <div>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-page="./Edit" asp-route-id="@Model.Product.Id">Edit</a>
+            }
+            <a asp-page="./Index">Back to List</a>
+        </div>
+        @if (_signInManager.IsSignedIn(User))
+        {
+            <form method="post" asp-page-handler="AddComment" style="width:300px; height=40px">
+                <div>
+                 <label>Your comment:</label>
+                <input asp-for="comment.Text" class="form-control form-control-sm"  aria-label="Your comment"> 
+                </div>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+            <form method="post" asp-page-handler="AddToCart">
+                    <button type="submit" class="btn btn-success">Add to cart</button>
+            </form>
+        }
+        else
+        {
+            <p>Log in before adding comments</p>
+        }
+        </dt>
+        <dt class="col-sm-2">
+             <p>Comments:</p>
+        </dt>
+        <dd>
+            @if (Model._comments!= null)
+            {
+                @foreach (var c in Model._comments.OrderByDescending(c=>c.Created))
+                {
+                <ul>
+                        <div class="card w-75 mb-3">
+                            <div class="card-body">
+                                <h4 class="card-title">@c.Text</h4>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                @if (User.IsInRole("Admin") || _userManager.GetUserId(User)==c.AuthorId)
+                                {
+                                    <form method="post" asp-page-handler="Delete">
+                                        <input type="hidden" name="commentId" value="@c.Id" />
+                                        <button type="submit" class="btn btn-danger">Delete Comment</button>
+                                    </form>
+                                }
+                                <p class="card-text">@c.Author - @c.Created.ToString("dd.MM.yyyy HH:mm")</p>
+                            </div>
+                        </div>
+                </ul>
+                }
+            }
+            else
+            {
+                <p>No comments yet.</p>
+            }
+        </dd>
+    </dl>
+</div>
+

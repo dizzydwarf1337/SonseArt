@@ -1,0 +1,39 @@
+﻿@page
+@model SonseArt.Pages.Cart.IndexModel
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+
+
+        <div style="display: flex; flex-wrap: nowrap;  justify-content:space-evenly;">
+            @foreach (var item in Model.Cart.Items) 
+            {  
+                <div class="row-cols">
+                    <div class="card h-100" sstyle="width: 18rem; margin-bottom: 10px;">
+                        <a asp-page="/Products/Details" asp-route-id="@item.ProductId" style="text-decoration: none; color: inherit;">
+                        <img src="@item.ImgSrc" class="card-img-top" alt="@item.ProductName" style="height: 15rem; object-fit: cover;">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">@item.ProductName</h5>
+                            <p class="card-text">@item.ProductPrice</p>
+                            <p class="card-text">@item.Quantity</p>
+                            <form asp-page-handler="DeleteItem">
+                                <input type="hidden" name="CartItemId" value="@item.Id" />
+                                <button type="submit" class="btn btn-outline-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>       
+            }
+    </div>
+    <div>
+        <p>@Model.Cart.GetCost()</p>
+    </div>
+    <div>
+        <form method="post" asp-page-handler="MakeAnOrder">
+            <input type="hidden" name="CartId" value="@Model.Cart.Id" />
+            <button type="submit" class="btn btn-ouline-primary">Make an Order</button>
+        </form>
+    </div>

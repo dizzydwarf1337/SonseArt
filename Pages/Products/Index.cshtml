@@ -1,0 +1,44 @@
+﻿@page
+@model SonseArt.Pages.Products.IndexModel
+@using Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> _signInManager
+@inject UserManager<User> _userManager
+@{
+    ViewData["Title"] = "Home";
+}
+
+<h1>Index</h1>
+<table class="table">
+    <tbody>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-page="Create">Create New</a>
+        }
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+            @foreach (var item in Model.Product)
+            {
+                <div class="card" style="width: 18rem; margin-bottom: 10px;">
+                    <a asp-page="./Details" asp-route-id="@item.Id" style="text-decoration: none; color: inherit;">
+                        <img src="@item.Image" class="card-img-top" alt="@item.Name" style="height: 15rem; object-fit: cover;">
+                    </a>
+                    <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem;">
+                        <a asp-page="./Details" asp-route-id="@item.Id" style="text-decoration: none; color: inherit;">
+                        <p class="card-text" style="margin: 0;">@item.Name</p>
+                        </a>
+                        <p class="card-text" style="margin: 0;">@item.Price</p>
+                    </div>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="card-footer" style="padding: 0.75rem;">
+                            <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
+                            <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+    </tbody>
+</table>
+
