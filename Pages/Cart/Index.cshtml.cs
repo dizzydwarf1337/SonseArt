@@ -68,7 +68,8 @@ namespace SonseArt.Pages.Cart
                     Items = new List<OrderItem>(),
                     UserFirstName = user.FirstName,
                     UserLastName = user.LastName,
-                    UserPhone = user.Phone
+                    UserPhone = user.Phone,
+                    date = DateTime.Now
                 };
 
                 foreach (var item in cartItems)

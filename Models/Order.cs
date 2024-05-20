@@ -14,6 +14,7 @@ namespace SonseArt.Models
         public string UserFirstName {  get; set; }
         public string UserLastName { get; set; }
         public string UserPhone {  get; set; }
+        public DateTime date {  get; set; }
         public OrderItem? item { get; set; }
         public List<OrderItem>? Items = new List<OrderItem>();
 
