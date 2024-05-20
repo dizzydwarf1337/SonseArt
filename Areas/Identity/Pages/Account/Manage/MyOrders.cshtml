@@ -6,7 +6,7 @@
             @foreach (var order in Model.MyOrders)
             {
                 <li class="list-group-item">
-                    <strong>Date:</strong> @order.date - <strong>Total Price:</strong> @order.OrderPrice
+                    <strong>Date:</strong> @order.date - <strong>Total Price:</strong> @order.OrderPrice - <strong>Status:</strong> @order.Status
                     <ul class="list-group mt-2">
                         @foreach (var item in order.Items)
                         {
