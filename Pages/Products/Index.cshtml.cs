@@ -20,10 +20,16 @@ namespace SonseArt.Pages.Products
         }
 
         public IList<Product> Product { get;set; } = default!;
+        [BindProperty]
+        public string SearchString { get; set; } = default!;
 
         public async Task OnGetAsync()
         {
             Product = await _context.Product.ToListAsync();
+        }
+        public async Task OnPostFindAsync()
+        {
+            Product= await _context.Product.Where(x=>x.Name.Contains(SearchString)).ToListAsync();
         }
     }
 }

@@ -53,6 +53,18 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Order.UserPhone)
         </dd>
+        @foreach(var item in Model.orderItems)
+        {
+            <dd class="col-sm-10">
+                @item.ProductName
+                @item.Quantity
+                @item.ProductPrice
+            </dd>
+            <form method="post" asp-page-handler="DeleteItem">
+                <input type="hidden" asp-for="@Model.orderItemId" value="@item.Id"/>
+                <button class="btn btn-danger" type="submit">Delete Item</button>
+            </form>
+        }
     </dl>
 </div>
 <div>

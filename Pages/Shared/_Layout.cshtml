@@ -12,11 +12,14 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SonseArt.styles.css" asp-append-version="true" />
 </head>
-<body style="background-color:#FFEFDF">
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Products/Index">SonseArt</a>
+<body style="background-color:#F5F5DC">
+    <header style="">
+       @*  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"> *@
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm box-shadow mb-3" style="background-color:#DEDE8D">
+            <div class="container" style="height:20">
+                <a class="navbar-brand" asp-area="" asp-page="/Products/Index" style="text-decoration: none; color: inherit;">
+                SonseArt  
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -28,9 +31,7 @@
                             <a class="nav-link" asp-page="/Orders/Index">Orders</a>
                         </ul>
                     }
-                    <ul>
-
-                    </ul>
+                    <ul></ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
@@ -42,7 +43,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted" style="background-color:#DEDE8D">
         <div class="container">
             &copy; 2024 - SonseArt - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
