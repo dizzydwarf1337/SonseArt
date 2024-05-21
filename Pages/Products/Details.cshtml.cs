@@ -17,10 +17,12 @@ namespace SonseArt.Pages.Products
     {
         private readonly SonseArt.Data.SonseArtContext _context;
         private readonly UserManager<User> _userManager;
-        public DetailsModel(UserManager<User> userManager, SonseArt.Data.SonseArtContext context)
+        private readonly SignInManager<User> _signInManager;
+        public DetailsModel(UserManager<User> userManager, SonseArt.Data.SonseArtContext context,SignInManager<User> signInManager)
         {
             _context = context;
             _userManager=userManager;
+            _signInManager=signInManager;
         }
         [BindProperty]
         public Product Product { get; set; } = default!;
@@ -87,7 +89,10 @@ namespace SonseArt.Pages.Products
         }
         public async Task<IActionResult> OnPostAddToCartAsync(int Quantity)
         {
-            
+            if (!_signInManager.IsSignedIn(User)) 
+            {
+                return Redirect("~/Identity/Account/Login");
+            } 
             int? productId = TempData["ProductId"] as int?;
             var user =await _userManager.GetUserAsync(User);
             var product = await _context.Product.FirstOrDefaultAsync(m => m.Id == productId);
