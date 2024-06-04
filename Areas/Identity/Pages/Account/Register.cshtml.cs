@@ -149,7 +149,7 @@ namespace SonseArt.Areas.Identity.Pages.Account
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
 
-                    await _userManager.AddToRoleAsync(user, "User");
+                    await _userManager.AddToRoleAsync(user, "Admin");
                     return LocalRedirect(returnUrl);
 
                 }
