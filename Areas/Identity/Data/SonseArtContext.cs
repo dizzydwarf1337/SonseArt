@@ -11,11 +11,12 @@ public class SonseArtContext : IdentityDbContext<User>
     public SonseArtContext(DbContextOptions<SonseArtContext> options)
         : base(options)
     {
+
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(builder);
+      base.OnModelCreating(builder);
     }
 
 public DbSet<SonseArt.Models.Product> Product { get; set; } = default!;
