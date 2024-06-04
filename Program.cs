@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SonseArt.Areas.Identity.Data;
 using SonseArt.Data;
+using SonseArt.Models;
 
 
 
@@ -23,7 +24,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
     options.AddPolicy("User", policy => policy.RequireRole("User"));
 });
-
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
